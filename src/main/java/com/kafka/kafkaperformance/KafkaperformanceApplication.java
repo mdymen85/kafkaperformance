@@ -38,9 +38,14 @@ public class KafkaperformanceApplication {
 				Serdes.String().getClass());
 
 		StreamsBuilder builder = new StreamsBuilder();
-		KStream<Integer, String> kStream = builder.stream("topic3");
-		kStream.foreach((k, v) -> System.out.println("Key = " + k + " Value = " + v));
-		//kStream.peek((k, v) -> System.out.println("Key = " + k + " Value = " + v));
+
+		builder.stream("topic3")
+				.to("topic4");
+		//kStream.foreach((k, v) -> System.out.println("Key = " + k + " Value = " + v));
+
+//		StreamsBuilder builder = new StreamsBuilder();
+//		KStream<Integer, String> kStream = builder.stream("topic3");
+//		kStream.foreach((k, v) -> System.out.println("Key = " + k + " Value = " + v));
 
 		Topology topology = builder.build();
 
