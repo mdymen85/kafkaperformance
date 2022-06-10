@@ -28,35 +28,31 @@ public class KafkaperformanceApplication {
 
 	public static void main(String[] args) throws IOException, InterruptedException {
 
-		Properties props = new Properties();
-		props.put(StreamsConfig.APPLICATION_ID_CONFIG, "HelloStreams");
-		props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
-		props.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG,
+		SpringApplication.run(KafkaperformanceApplication.class, args);
 
-				Serdes.Integer().getClass());
-		props.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG,
-				Serdes.String().getClass());
-
-		StreamsBuilder builder = new StreamsBuilder();
-
-		builder.stream("topic3")
-				.to("topic4");
-		//kStream.foreach((k, v) -> System.out.println("Key = " + k + " Value = " + v));
-
+//		Properties props = new Properties();
+//		props.put(StreamsConfig.APPLICATION_ID_CONFIG, "HelloStreams");
+//		props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
+//		props.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.Integer().getClass());
+//		props.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, Serdes.String().getClass());
+//
 //		StreamsBuilder builder = new StreamsBuilder();
-//		KStream<Integer, String> kStream = builder.stream("topic3");
-//		kStream.foreach((k, v) -> System.out.println("Key = " + k + " Value = " + v));
+//
+//		builder.stream("topic3")
+//				.to("topic4");
+//
+//		Topology topology = builder.build();
+//
+//		KafkaStreams streams = new KafkaStreams(topology, props);
+//		log.info("Starting the stream");
+//		streams.start();
+//
+//		Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+//			log.info("Stopping Stream");
+//			streams.close();
+//		}));
 
-		Topology topology = builder.build();
-
-		KafkaStreams streams = new KafkaStreams(topology, props);
-		log.info("Starting the stream");
-		streams.start();
-
-		Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-			log.info("Stopping Stream");
-			streams.close();
-		}));
 	}
+
 
 }
