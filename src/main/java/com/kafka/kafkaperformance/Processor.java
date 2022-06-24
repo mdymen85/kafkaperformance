@@ -4,33 +4,34 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.common.serialization.Serde;
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.StreamsBuilder;
-import org.apache.kafka.streams.kstream.*;
+import org.apache.kafka.streams.StreamsConfig;
+import org.apache.kafka.streams.kstream.Consumed;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
+import java.util.Properties;
 
 @Component
 @Slf4j
-class Processor {
+public class Processor {
 
     @Autowired
     public void process(StreamsBuilder builder) {
+
+        Properties props = new Properties();
+        props.put(StreamsConfig.APPLICATION_ID_CONFIG, "HelloStreams");
+        props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
+        props.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.String().getClass());
+        props.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, Serdes.String().getClass());
+
 
         final Serde<Integer> integerSerde = Serdes.Integer();
         final Serde<String> stringSerde = Serdes.String();
         final Serde<Long> longSerde = Serdes.Long();
 
-                builder.stream("topic3", Consumed.with(integerSerde, stringSerde))
-                .to("topic4");
+        var stream = builder.stream("topic3", Consumed.with(integerSerde, stringSerde));
+        stream.to("topic4");
 
-//        KStream<Integer, String> textLines = builder.stream("topic3", Consumed.with(integerSerde, stringSerde));
-//
-//        KTable<String, Long> wordCounts = textLines
-//                .flatMapValues(value -> Arrays.asList(value.toLowerCase().split("\\W+")))
-//                .groupBy((key, value) -> value, Grouped.with(stringSerde, stringSerde))
-//                .count();
-//
-//        wordCounts.toStream().to("topic4", Produced.with(stringSerde, longSerde));
     }
+
 }
